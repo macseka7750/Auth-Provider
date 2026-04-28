@@ -11,7 +11,7 @@ env = environ.Env(DEBUG=(bool, False))
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 1. PATH CONFIGURATION
-# This allows us to import apps directly (e.g., 'users' instead of 'apps.users')
+# Essential for the modular 'apps/' structure
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Take environment variables from .env file
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'django_filters',
+    'drf_spectacular',  # Documentation engine
     
     # Internal Apps (Modular structure)
     'apps.users',
@@ -43,9 +44,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Must be at the top
+    'corsheaders.middleware.CorsMiddleware',  # Top for CORS handling
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Static file management
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,13 +76,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # 4. DATABASE CONFIGURATION
-# Uses DB_URL style (postgres://user:password@db:5432/dbname) from .env
 DATABASES = {
     'default': env.db()
 }
 
 # 5. AUTHENTICATION & IDENTITY
-# Tell Django to use your custom user model for RBAC
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
@@ -94,6 +93,18 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    # Swagger/OpenAPI Schema Class
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# Swagger/OpenAPI UI Settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Professional Backend API',
+    'DESCRIPTION': 'Modular Django API with JWT, OAuth2, and RBAC implementation.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_PATCH': True,
+    'SECURITY': [{'jwt': []}],
 }
 
 SIMPLE_JWT = {
@@ -104,31 +115,15 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# 6. PASSWORD VALIDATION
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-# 7. INTERNATIONALIZATION
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
-
-# 8. STATIC & MEDIA FILES
+# 6. STATIC & MEDIA FILES
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Enable WhiteNoise storage for compression and caching
+# Efficient storage for production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# 9. MISCELLANEOUS
+# 7. MISCELLANEOUS
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# CORS configuration (adjust for production)
 CORS_ALLOW_ALL_ORIGINS = DEBUG
