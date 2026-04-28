@@ -1,0 +1,27 @@
+# ==============================================================================
+# CORE FRAMEWORK & API
+# ==============================================================================
+Django>=4.2,<5.1
+djangorestframework
+django-cors-headers        # Required for frontend-backend communication
+
+# ==============================================================================
+# DATABASE & ENVIRONMENT
+# ==============================================================================
+psycopg2-binary            # PostgreSQL connector
+django-environ             # For loading your .env file variables
+
+# ==============================================================================
+# IDENTITY & AUTHENTICATION (JWT, OAuth2, RBAC)
+# ==============================================================================
+djangorestframework-simplejwt    # Industry standard for JWT
+django-allauth                   # The powerhouse for OAuth2/Social Auth
+dj-rest-auth                     # Connects DRF, SimpleJWT, and AllAuth together
+django-extensions                # Helpful tools for debugging RBAC and models
+
+# ==============================================================================
+# PRODUCTION SERVER & UTILITIES
+# ==============================================================================
+gunicorn                   # WSGI HTTP Server for production
+requests                   # For making external API calls (needed for OAuth)
+whitenoise                 # Efficient static file serving
