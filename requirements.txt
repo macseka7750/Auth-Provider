@@ -20,8 +20,14 @@ dj-rest-auth                     # Connects DRF, SimpleJWT, and AllAuth together
 django-extensions                # Helpful tools for debugging RBAC and models
 
 # ==============================================================================
+# DOCUMENTATION (Swagger/OpenAPI)
+# ==============================================================================
+drf-spectacular            # Modern OpenAPI 3.0 schema generator
+
+# ==============================================================================
 # PRODUCTION SERVER & UTILITIES
 # ==============================================================================
 gunicorn                   # WSGI HTTP Server for production
 requests                   # For making external API calls (needed for OAuth)
 whitenoise                 # Efficient static file serving
+django-filter              # Required for DRF filtering capabilities
